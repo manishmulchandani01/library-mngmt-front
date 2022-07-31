@@ -1,0 +1,33 @@
+a {
+    color: white;
+    text-decoration: none;
+}
+
+.Body {
+    padding: 50px 200px;
+    text-align: center;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    text-align: center;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
