@@ -8,7 +8,10 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 
 export default function EditBook(props) {
     const [open, setOpen] = React.useState(false);
@@ -17,6 +20,7 @@ export default function EditBook(props) {
     const [borrowedBy, setBorrowedBy] = useState("");
     const [borrowDate, setBorrowDate] = useState("");
     const [returnDate, setReturnDate] = useState("");
+    const [students, setStudents] = useState(null);
 
     const handleClickOpen = () => {
         setName(props.name);
@@ -30,6 +34,21 @@ export default function EditBook(props) {
     const handleClose = () => {
         setOpen(false);
     };
+
+    const getStudents = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/students");
+            const jsonData = await response.json();
+
+            setStudents(jsonData);
+        } catch (error) {
+            console.error(error.message);
+        }
+    };
+
+    useEffect(() => {
+        getStudents();
+    }, [students]);
 
     const handleSave = async () => {
         if (name !== "" && author !== "") {
@@ -85,17 +104,26 @@ export default function EditBook(props) {
                         value={author}
                         onChange={(e) => setAuthor(e.target.value)}
                     />
-                    <TextField
-                        autoFocus
-                        margin="dense"
+                    <InputLabel sx={{ mt: 2 }} id="student">
+                        Borrowed By
+                    </InputLabel>
+                    <Select
+                        labelId="borrowedBy"
                         id="borrowedBy"
-                        label="Borrowed By"
-                        type="text"
-                        fullWidth
-                        variant="standard"
                         value={borrowedBy}
+                        label="borrowedBy"
                         onChange={(e) => setBorrowedBy(e.target.value)}
-                    />
+                    >
+                        {students &&
+                            students.map((student) => (
+                                <MenuItem
+                                    key={student.id}
+                                    value={student.firstName}
+                                >
+                                    {student.firstName}
+                                </MenuItem>
+                            ))}
+                    </Select>
                     <TextField
                         autoFocus
                         margin="dense"
